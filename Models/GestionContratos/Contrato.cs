@@ -52,7 +52,5 @@ namespace S_CIngenieria.Models.GestionContratos
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
         [DataType(DataType.Date)]
         public DateTime Fecha_Fin { get; set; }
-
-        public ICollection<OrdenCambio>? OrdenesCambio { get; set; }
     }
 }

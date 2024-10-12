@@ -213,43 +213,18 @@ namespace S_CIngenieria.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ordenCambios",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ContratoId = table.Column<int>(type: "int", nullable: false),
-                    AmpliacionContratoId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ordenCambios", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ordenCambios_AmpliacionContratos_AmpliacionContratoId",
-                        column: x => x.AmpliacionContratoId,
-                        principalTable: "AmpliacionContratos",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_ordenCambios_Contratos_ContratoId",
-                        column: x => x.ContratoId,
-                        principalTable: "Contratos",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "oDs",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EmpesasId = table.Column<int>(type: "int", nullable: false),
+                    ContratosId = table.Column<int>(type: "int", nullable: false),
+                    AmpliacionContratoId = table.Column<int>(type: "int", nullable: false),
                     Descripcion = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     ValorInicalODS = table.Column<int>(type: "int", maxLength: 50, nullable: false),
                     DiasEjecuCionODS = table.Column<int>(type: "int", nullable: false),
                     FechaInicioODS = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FechaFinODS = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    OrdenesCambioId = table.Column<int>(type: "int", nullable: false),
                     SuspensionFechaInicio = table.Column<DateTime>(type: "datetime2", nullable: true),
                     SuspensionFechaFin = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ValorActual = table.Column<decimal>(type: "decimal(18,2)", maxLength: 50, nullable: false),
@@ -266,9 +241,15 @@ namespace S_CIngenieria.Migrations
                 {
                     table.PrimaryKey("PK_oDs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_oDs_Empresas_EmpesasId",
-                        column: x => x.EmpesasId,
-                        principalTable: "Empresas",
+                        name: "FK_oDs_AmpliacionContratos_AmpliacionContratoId",
+                        column: x => x.AmpliacionContratoId,
+                        principalTable: "AmpliacionContratos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_oDs_Contratos_ContratosId",
+                        column: x => x.ContratosId,
+                        principalTable: "Contratos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -295,12 +276,6 @@ namespace S_CIngenieria.Migrations
                         principalTable: "Usuarios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_oDs_ordenCambios_OrdenesCambioId",
-                        column: x => x.OrdenesCambioId,
-                        principalTable: "ordenCambios",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -325,6 +300,29 @@ namespace S_CIngenieria.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ordenCambios",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ODSId = table.Column<int>(type: "int", nullable: false),
+                    FechaInicioAmpliacion = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaFinAmpliacion = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ValorAmpliacion = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    NumeroDiasAmpliacion = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ordenCambios", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ordenCambios_oDs_ODSId",
+                        column: x => x.ODSId,
+                        principalTable: "oDs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Actas_ODSId",
                 table: "Actas",
@@ -341,14 +339,14 @@ namespace S_CIngenieria.Migrations
                 column: "EmpresasId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_oDs_EmpesasId",
+                name: "IX_oDs_AmpliacionContratoId",
                 table: "oDs",
-                column: "EmpesasId");
+                column: "AmpliacionContratoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_oDs_OrdenesCambioId",
+                name: "IX_oDs_ContratosId",
                 table: "oDs",
-                column: "OrdenesCambioId");
+                column: "ContratosId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_oDs_ProyectosId",
@@ -371,16 +369,9 @@ namespace S_CIngenieria.Migrations
                 column: "TroncalesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ordenCambios_AmpliacionContratoId",
+                name: "IX_ordenCambios_ODSId",
                 table: "ordenCambios",
-                column: "AmpliacionContratoId",
-                unique: true,
-                filter: "[AmpliacionContratoId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ordenCambios_ContratoId",
-                table: "ordenCambios",
-                column: "ContratoId");
+                column: "ODSId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Permisos_FkRelacionalModulosRoles",
@@ -410,6 +401,9 @@ namespace S_CIngenieria.Migrations
                 name: "Actas");
 
             migrationBuilder.DropTable(
+                name: "ordenCambios");
+
+            migrationBuilder.DropTable(
                 name: "Permisos");
 
             migrationBuilder.DropTable(
@@ -417,6 +411,9 @@ namespace S_CIngenieria.Migrations
 
             migrationBuilder.DropTable(
                 name: "RelacionalModulosRoles");
+
+            migrationBuilder.DropTable(
+                name: "AmpliacionContratos");
 
             migrationBuilder.DropTable(
                 name: "Proyectos");
@@ -428,19 +425,13 @@ namespace S_CIngenieria.Migrations
                 name: "Usuarios");
 
             migrationBuilder.DropTable(
-                name: "ordenCambios");
-
-            migrationBuilder.DropTable(
                 name: "Modulos");
 
             migrationBuilder.DropTable(
-                name: "Roles");
-
-            migrationBuilder.DropTable(
-                name: "AmpliacionContratos");
-
-            migrationBuilder.DropTable(
                 name: "Contratos");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Empresas");

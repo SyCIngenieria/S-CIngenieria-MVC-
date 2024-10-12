@@ -60,12 +60,6 @@ namespace S_CIngenieria.Models
              .HasForeignKey(c => c.EmpresasId)
              .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<ODS>()
-                .HasOne(o => o.Empresas)
-                .WithMany(e => e.ODS)
-                .HasForeignKey(o => o.EmpesasId)
-                .OnDelete(DeleteBehavior.Restrict);
-
             modelBuilder.Entity<AmpliacionContrato>()
                  .HasOne(a => a.Contrato)
                  .WithMany()
@@ -73,26 +67,28 @@ namespace S_CIngenieria.Models
                  .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<OrdenCambio>()
-                .HasOne(o => o.Contrato)
-                .WithMany(c => c.OrdenesCambio)
-                .HasForeignKey(o => o.ContratoId)
+                .HasOne(o => o.ODS)
+                .WithMany()
+                .HasForeignKey(o => o.ODSId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<OrdenCambio>()
-               .HasOne(o => o.AmpliacionContrato)
-               .WithOne()
-               .HasForeignKey<OrdenCambio>(o => o.AmpliacionContratoId);
-
-            modelBuilder.Entity<ODS>()
-               .HasOne(o => o.OrdenCambio)
-               .WithMany(oc => oc.ODS)
-               .HasForeignKey(o => o.OrdenesCambioId)
-               .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ODS>()
                .HasOne(o => o.Proyectos)
                .WithMany(p => p.ODS)
                .HasForeignKey(o => o.ProyectosId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ODS>()
+               .HasOne(o => o.Contrato)
+               .WithMany()
+               .HasForeignKey(o => o.ContratosId) 
+               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ODS>()
+               .HasOne(o => o.AmpliacionContrato)
+               .WithMany()
+               .HasForeignKey(o => o.AmpliacionContratoId) 
                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ODS>()

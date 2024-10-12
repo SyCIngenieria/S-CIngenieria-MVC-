@@ -14,7 +14,6 @@ namespace S_CIngenieria.Models.GestionContratos
         [MaxLength(50, ErrorMessage = "El campo {0} debe tener máximo {1} caracteres")]
         public string NIT { get; set; }
 
-        public ICollection<ODS>? ODS { get; set; }
         public ICollection<Contrato>? Contratos { get; set; }
     }
 }

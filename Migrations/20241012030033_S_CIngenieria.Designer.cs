@@ -12,7 +12,7 @@ using S_CIngenieria.Models;
 namespace S_CIngenieria.Migrations
 {
     [DbContext(typeof(SyCIngenieriaContext))]
-    [Migration("20241012014834_S_CIngenieria")]
+    [Migration("20241012030033_S_CIngenieria")]
     partial class S_CIngenieria
     {
         /// <inheritdoc />
@@ -180,10 +180,16 @@ namespace S_CIngenieria.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AmpliacionContratoId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ConexoObra")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("ContratosId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
@@ -191,9 +197,6 @@ namespace S_CIngenieria.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("DiasEjecuCionODS")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EmpesasId")
                         .HasColumnType("int");
 
                     b.Property<int>("EstadoODS")
@@ -204,9 +207,6 @@ namespace S_CIngenieria.Migrations
 
                     b.Property<DateTime>("FechaInicioODS")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("OrdenesCambioId")
-                        .HasColumnType("int");
 
                     b.Property<string>("PlantaSistema")
                         .IsRequired()
@@ -244,9 +244,9 @@ namespace S_CIngenieria.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmpesasId");
+                    b.HasIndex("AmpliacionContratoId");
 
-                    b.HasIndex("OrdenesCambioId");
+                    b.HasIndex("ContratosId");
 
                     b.HasIndex("ProyectosId");
 
@@ -267,19 +267,24 @@ namespace S_CIngenieria.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AmpliacionContratoId")
+                    b.Property<DateTime>("FechaFinAmpliacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaInicioAmpliacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("NumeroDiasAmpliacion")
                         .HasColumnType("int");
 
-                    b.Property<int>("ContratoId")
+                    b.Property<int>("ODSId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("ValorAmpliacion")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AmpliacionContratoId")
-                        .IsUnique()
-                        .HasFilter("[AmpliacionContratoId] IS NOT NULL");
-
-                    b.HasIndex("ContratoId");
+                    b.HasIndex("ODSId");
 
                     b.ToTable("ordenCambios");
                 });
@@ -517,15 +522,15 @@ namespace S_CIngenieria.Migrations
 
             modelBuilder.Entity("S_CIngenieria.Models.GestionContratos.ODS", b =>
                 {
-                    b.HasOne("S_CIngenieria.Models.GestionContratos.Empresas", "Empresas")
-                        .WithMany("ODS")
-                        .HasForeignKey("EmpesasId")
+                    b.HasOne("S_CIngenieria.Models.GestionContratos.AmpliacionContrato", "AmpliacionContrato")
+                        .WithMany()
+                        .HasForeignKey("AmpliacionContratoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("S_CIngenieria.Models.GestionContratos.OrdenCambio", "OrdenCambio")
-                        .WithMany("ODS")
-                        .HasForeignKey("OrdenesCambioId")
+                    b.HasOne("S_CIngenieria.Models.GestionContratos.Contrato", "Contrato")
+                        .WithMany()
+                        .HasForeignKey("ContratosId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -553,9 +558,9 @@ namespace S_CIngenieria.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Empresas");
+                    b.Navigation("AmpliacionContrato");
 
-                    b.Navigation("OrdenCambio");
+                    b.Navigation("Contrato");
 
                     b.Navigation("Proyectos");
 
@@ -568,19 +573,13 @@ namespace S_CIngenieria.Migrations
 
             modelBuilder.Entity("S_CIngenieria.Models.GestionContratos.OrdenCambio", b =>
                 {
-                    b.HasOne("S_CIngenieria.Models.GestionContratos.AmpliacionContrato", "AmpliacionContrato")
-                        .WithOne()
-                        .HasForeignKey("S_CIngenieria.Models.GestionContratos.OrdenCambio", "AmpliacionContratoId");
-
-                    b.HasOne("S_CIngenieria.Models.GestionContratos.Contrato", "Contrato")
-                        .WithMany("OrdenesCambio")
-                        .HasForeignKey("ContratoId")
+                    b.HasOne("S_CIngenieria.Models.GestionContratos.ODS", "ODS")
+                        .WithMany()
+                        .HasForeignKey("ODSId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("AmpliacionContrato");
-
-                    b.Navigation("Contrato");
+                    b.Navigation("ODS");
                 });
 
             modelBuilder.Entity("S_CIngenieria.Models.Seguridad.Permisos", b =>
@@ -624,26 +623,14 @@ namespace S_CIngenieria.Migrations
                     b.Navigation("Rol");
                 });
 
-            modelBuilder.Entity("S_CIngenieria.Models.GestionContratos.Contrato", b =>
-                {
-                    b.Navigation("OrdenesCambio");
-                });
-
             modelBuilder.Entity("S_CIngenieria.Models.GestionContratos.Empresas", b =>
                 {
                     b.Navigation("Contratos");
-
-                    b.Navigation("ODS");
                 });
 
             modelBuilder.Entity("S_CIngenieria.Models.GestionContratos.ODS", b =>
                 {
                     b.Navigation("Actas");
-                });
-
-            modelBuilder.Entity("S_CIngenieria.Models.GestionContratos.OrdenCambio", b =>
-                {
-                    b.Navigation("ODS");
                 });
 
             modelBuilder.Entity("S_CIngenieria.Models.GestionContratos.Proyectos", b =>

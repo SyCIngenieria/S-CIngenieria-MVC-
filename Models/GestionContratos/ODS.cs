@@ -8,9 +8,13 @@ namespace S_CIngenieria.Models.GestionContratos
     {
         public int Id { get; set; }
 
-        [ForeignKey("Empresas")]
-        public int EmpesasId { get; set; }
-        public Empresas? Empresas { get; set; }
+        [ForeignKey("Contrato")]
+        public int ContratosId { get; set; }
+        public Contrato? Contrato { get; set; }
+
+        [ForeignKey("AmpliacionContrato")]
+        public int AmpliacionContratoId { get; set; }
+        public AmpliacionContrato? AmpliacionContrato { get; set; }
 
         [MaxLength(500, ErrorMessage = "El campo {0} debe tener máximo {1} caracteres")]
         [DataType(DataType.MultilineText)]
@@ -30,11 +34,6 @@ namespace S_CIngenieria.Models.GestionContratos
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
         [DataType(DataType.Date)]
         public DateTime FechaFinODS { get; set; }
-
-        [ForeignKey("OrdenCambio")]
-        public int OrdenesCambioId { get; set; }
-        public OrdenCambio? OrdenCambio { get; set; }
-
 
         [DataType(DataType.Date)]
         public DateTime? SuspensionFechaInicio { get; set; }

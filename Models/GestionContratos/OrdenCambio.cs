@@ -7,15 +7,24 @@ namespace S_CIngenieria.Models.GestionContratos
     {
         public int Id { get; set; }
 
-        [ForeignKey("Contrato")]
+        [ForeignKey("ODS")]
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
-        public int ContratoId { get; set; }
-        public Contrato? Contrato { get; set; }
+        public int ODSId { get; set; }
+        public ODS? ODS { get; set; }
 
-        [ForeignKey("AmpliacionContrato")]
-        public int? AmpliacionContratoId { get; set; }
-        public AmpliacionContrato? AmpliacionContrato { get; set; }
+        [Required(ErrorMessage = "El campo {0} es obligatorio")]
+        [DataType(DataType.Date)]
+        public DateTime FechaInicioAmpliacion { get; set; }
 
-        public ICollection<ODS>? ODS { get; set; }
+        [Required(ErrorMessage = "El campo {0} es obligatorio")]
+        [DataType(DataType.Date)]
+        public DateTime FechaFinAmpliacion { get; set; }
+
+        [Required(ErrorMessage = "El campo {0} es obligatorio")]
+        [DataType(DataType.Currency)]
+        public decimal ValorAmpliacion { get; set; }
+
+        [Range(0, int.MaxValue, ErrorMessage = "El campo {0} debe ser un valor no negativo")]
+        public int NumeroDiasAmpliacion { get; set; }
     }
 }
