@@ -24,6 +24,12 @@ namespace S_CIngenieria.Service
                 .FirstOrDefaultAsync();
             return usuario;
         }
+        public async Task<Usuarios> GetUsuarioPorNombre(string nombreUsuario)
+        {
+            return await _context.Usuarios
+                .Include(u => u.Rol) 
+                .FirstOrDefaultAsync(u => u.NombreUsuario == nombreUsuario);
+        }
 
         public async Task<Usuarios> SaveUsuario(Usuarios usuario)
         {

@@ -1,44 +1,56 @@
+ï»¿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using S_CIngenieria.Models;
-using System.Diagnostics;
+using S_CIngenieria.Models.Seguridad;
+using S_CIngenieria.Service;
 using System.Security.Claims;
+using System.Diagnostics;
 
 namespace S_CIngenieria.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IUsuarioService _usuarioService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IUsuarioService usuarioService)
         {
             _logger = logger;
+            _usuarioService = usuarioService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            Usuarios usuario = null;
             ClaimsPrincipal claimsUser = HttpContext.User;
-            string nombreUsuario = string.Empty;
-            string fotoPerfil = string.Empty;
 
             if (claimsUser.Identity.IsAuthenticated)
             {
-                // Extraer los claims del usuario autenticado
-                nombreUsuario = claimsUser.Claims
+                // Obtener el nombre del usuario desde los claims
+                string nombreUsuario = claimsUser.Claims
                     .Where(c => c.Type == ClaimTypes.Name)
                     .Select(c => c.Value).SingleOrDefault();
 
-                fotoPerfil = claimsUser.Claims
-                    .Where(c => c.Type == "fotoPerfil")
-                    .Select(c => c.Value).SingleOrDefault();
+                // Obtener el usuario completo de la base de datos
+                usuario = await _usuarioService.GetUsuarioPorNombre(nombreUsuario);
+
+                if (usuario != null)
+                {
+                    ViewData["nombreUsuario"] = usuario.Nombres + " " + usuario.Apellidos; // Concatenar nombres y apellidos
+                    ViewData["fotoPerfil"] = usuario.fotoPerfil; // Foto de perfil
+                }
             }
 
-            // Pasar los valores extraídos a la vista
-            ViewData["nombreUsuario"] = nombreUsuario;
-            ViewData["fotoPerfil"] = fotoPerfil;
+            // Si no se encuentra el usuario, puedes agregar un mensaje de error si lo deseas
+            if (usuario == null)
+            {
+                ViewData["Mensaje"] = "Usuario no encontrado.";
+            }
 
-            return View();
+            return View(usuario); // Pasar el objeto usuario a la vista
         }
 
         public IActionResult Privacy()
@@ -55,9 +67,9 @@ namespace S_CIngenieria.Controllers
         [HttpPost]
         public async Task<IActionResult> CerrarSesion()
         {
-            // Finalizar la sesión del usuario actual
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("IniciarSesion", "Login");
         }
     }
 }
+

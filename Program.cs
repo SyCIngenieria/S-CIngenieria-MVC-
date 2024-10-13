@@ -12,37 +12,36 @@ namespace S_CIngenieria
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            // Configurar la base de datos
+            
             builder.Services.AddDbContext<SyCIngenieriaContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // Inyectar servicios personalizados
+            
             builder.Services.AddScoped<IUsuarioService, UsuarioService>();
             builder.Services.AddScoped<IFilesService, FilesService>();
 
-            // Configurar autenticación con cookies
+            
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LoginPath = "/Login/IniciarSesion";  // Página de inicio de sesión
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(20);  // Tiempo de expiración de la cookie
+                    options.LoginPath = "/Login/IniciarSesion";  
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(20);  
                 });
 
-            // Registrar cache distribuida para las sesiones
-            builder.Services.AddDistributedMemoryCache();  // Necesario para almacenar datos de sesión
+            
+            builder.Services.AddDistributedMemoryCache();  
 
-            // Configuración de sesiones
+            
             builder.Services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(30);  // Duración de la sesión
-                options.Cookie.HttpOnly = true;  // Solo accesible a través de HTTP, mejora la seguridad
-                options.Cookie.IsEssential = true;  // Necesario para asegurar que la sesión funcione bajo RGPD
+                options.IdleTimeout = TimeSpan.FromMinutes(30);  
+                options.Cookie.HttpOnly = true;  
+                options.Cookie.IsEssential = true;  
             });
 
-            // Filtro para evitar almacenamiento en caché de las respuestas
+           
             builder.Services.AddControllersWithViews(options =>
             {
                 options.Filters.Add(new ResponseCacheAttribute
@@ -54,7 +53,7 @@ namespace S_CIngenieria
 
             var app = builder.Build();
 
-            // Configurar el pipeline HTTP
+            
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
@@ -66,14 +65,14 @@ namespace S_CIngenieria
 
             app.UseRouting();
 
-            // Habilitar autenticación y autorización
+            
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // Habilitar el uso de sesiones
+            
             app.UseSession();
 
-            // Configurar las rutas
+        
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Login}/{action=IniciarSesion}/{id?}");

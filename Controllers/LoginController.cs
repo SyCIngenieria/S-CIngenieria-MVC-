@@ -82,7 +82,6 @@ namespace S_CIngenieria.Controllers
         [HttpPost]
         public async Task<IActionResult> IniciarSesion(string NombreUsuario, string Contraseña)
         {
-            
             if (string.IsNullOrEmpty(NombreUsuario) || string.IsNullOrEmpty(Contraseña))
             {
                 ViewData["Mensaje"] = "Por favor, complete todos los campos.";
@@ -91,16 +90,27 @@ namespace S_CIngenieria.Controllers
 
             var usuario = await _usuarioService.GetUsuario(NombreUsuario, Contraseña);
 
-            
             if (usuario == null)
             {
                 ViewData["Mensaje"] = "Nombre de usuario o contraseña incorrectos.";
                 return View();
             }
 
-          
-            HttpContext.Session.SetString("Usuario", usuario.NombreUsuario);
-            return RedirectToAction("Index", "Home");
+            
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.Name, usuario.NombreUsuario),
+        new Claim("fotoPerfil", usuario.fotoPerfil) 
+    };
+
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+            
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+
+            return RedirectToAction("Index", "Home"); 
         }
 
         [HttpPost("CerrarSesion")]
