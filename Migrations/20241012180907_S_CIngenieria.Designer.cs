@@ -12,7 +12,7 @@ using S_CIngenieria.Models;
 namespace S_CIngenieria.Migrations
 {
     [DbContext(typeof(SyCIngenieriaContext))]
-    [Migration("20241012030033_S_CIngenieria")]
+    [Migration("20241012180907_S_CIngenieria")]
     partial class S_CIngenieria
     {
         /// <inheritdoc />
@@ -424,8 +424,10 @@ namespace S_CIngenieria.Migrations
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Nombre")
-                        .HasColumnType("int");
+                    b.Property<string>("nombre")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -477,7 +479,6 @@ namespace S_CIngenieria.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("fotoPerfil")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

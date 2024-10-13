@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewData["Title"] = "RegistroExitoso";
+}
+
+<div class="text-center">
+    <h2>¡Registro Exitoso!</h2>
+    <p>Su cuenta ha sido creada exitosamente. Será redirigido a la página de inicio de sesión en unos momentos.</p>
+</div>
+
+<script>
+    setTimeout(function () {
+        window.location.href = '@Url.Action("IniciarSesion", "Login")';
+    }, 5000);
+</script>

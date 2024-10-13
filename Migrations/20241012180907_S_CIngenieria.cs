@@ -59,7 +59,7 @@ namespace S_CIngenieria.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nombre = table.Column<int>(type: "int", nullable: false),
+                    nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -143,7 +143,7 @@ namespace S_CIngenieria.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NombreUsuario = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Contraseña = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    fotoPerfil = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    fotoPerfil = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Nombres = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Apellidos = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Correo = table.Column<string>(type: "nvarchar(max)", nullable: false),

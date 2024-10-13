@@ -17,7 +17,7 @@ namespace S_CIngenieria.Models.Seguridad
         public string Contraseña { get; set; } = null!;
 
         [DataType(DataType.Url)]
-        public string fotoPerfil { get; set; }
+        public string? fotoPerfil { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caracteres")]

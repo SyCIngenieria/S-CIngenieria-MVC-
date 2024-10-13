@@ -421,8 +421,10 @@ namespace S_CIngenieria.Migrations
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Nombre")
-                        .HasColumnType("int");
+                    b.Property<string>("nombre")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -474,7 +476,6 @@ namespace S_CIngenieria.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("fotoPerfil")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
