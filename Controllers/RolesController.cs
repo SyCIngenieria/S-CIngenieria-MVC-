@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using S_CIngenieria.Models;
 using S_CIngenieria.Models.Seguridad;
 using System.Threading.Tasks;
 
 namespace S_CIngenieria.Controllers
 {
+    [Authorize(Roles = "Administrador")]  // Protege todas las acciones del controlador
     public class RolesController : Controller
     {
         private readonly SyCIngenieriaContext _context;
@@ -14,7 +16,7 @@ namespace S_CIngenieria.Controllers
             _context = context;
         }
 
-        // Acción para mostrar la lista de roles
+        // Acción para mostrar la lista de roles, accesible solo por administradores
         public async Task<IActionResult> Index()
         {
             var roles = _context.Roles.ToList();

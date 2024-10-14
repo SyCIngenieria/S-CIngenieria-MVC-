@@ -97,20 +97,28 @@ namespace S_CIngenieria.Controllers
             }
 
             
+            var nombreRol = await _usuarioService.GetRolNombrePorUsuario(usuario.Id);
+
+            if (nombreRol == null)
+            {
+                ViewData["Mensaje"] = "Error al obtener el rol del usuario.";
+                return View();
+            }
+
             var claims = new List<Claim>
     {
         new Claim(ClaimTypes.Name, usuario.NombreUsuario),
-        new Claim("fotoPerfil", usuario.fotoPerfil) 
+        new Claim(ClaimTypes.Role, nombreRol),  
+        new Claim("fotoPerfil", usuario.fotoPerfil ?? string.Empty)
     };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
-            
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 
-            return RedirectToAction("Index", "Home"); 
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost("CerrarSesion")]

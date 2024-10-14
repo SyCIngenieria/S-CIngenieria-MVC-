@@ -7,7 +7,7 @@ namespace S_CIngenieria.Service
         Task<Usuarios> GetUsuario(string NombreUsuario, string Contraseña);
         Task<Usuarios> SaveUsuario(Usuarios usuario);
         Task<List<Permisos>> GetPermisosPorUsuario(int usuarioId);
-        Task<List<Roles>> GetRolesPorUsuario(int usuarioId);
+        Task<string?> GetRolNombrePorUsuario(int usuarioId);
         Task<Usuarios> GetUsuarioPorNombre(string nombreUsuario);
     }
 }

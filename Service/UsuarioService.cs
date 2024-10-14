@@ -39,14 +39,12 @@ namespace S_CIngenieria.Service
             return usuario;
         }
 
-        public async Task<List<Roles>> GetRolesPorUsuario(int usuarioId)
+        public async Task<string?> GetRolNombrePorUsuario(int usuarioId)
         {
-            return await _context.Roles
-                .Where(r => _context.Usuarios
-                    .Where(u => u.Id == usuarioId)
-                    .Select(u => u.FkRol)
-                    .Contains(r.Id))
-                .ToListAsync();
+            return await (from u in _context.Usuarios
+                          join r in _context.Roles on u.FkRol equals r.Id
+                          where u.Id == usuarioId
+                          select r.nombre).FirstOrDefaultAsync();
         }
 
 
