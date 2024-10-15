@@ -8,6 +8,7 @@ using S_CIngenieria.Models.Seguridad;
 using S_CIngenieria.Service;
 using System.Security.Claims;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace S_CIngenieria.Controllers
 {
@@ -69,6 +70,11 @@ namespace S_CIngenieria.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("IniciarSesion", "Login");
+        }
+        [AllowAnonymous]
+        public IActionResult AccesoDenegado()
+        {
+            return View();
         }
     }
 }

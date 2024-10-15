@@ -1,29 +1,36 @@
-﻿@model S_CIngenieria.Models.Seguridad.Roles
+﻿@model IEnumerable<S_CIngenieria.Models.Seguridad.Roles>
 
 @{
-    ViewData["Title"] = "Crear Rol";
+    ViewData["Title"] = "Lista de Roles";
 }
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-action="Crear" method="post">
-    <div class="form-group">
-        <label asp-for="nombre"></label>
-        <input asp-for="nombre" class="form-control" />
-        <span asp-validation-for="nombre" class="text-danger"></span>
-    </div>
+<p>
+    <a asp-action="Crear" class="btn btn-primary">Crear Nuevo Rol</a>
+</p>
 
-    <div class="form-group">
-        <label asp-for="Estado"></label>
-        <input asp-for="Estado" type="checkbox" class="form-control" />
-    </div>
-
-    <button type="submit" class="btn btn-primary">Crear</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-</form>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rol in Model)
+        {
+            <tr>
+                <td>@rol.Id</td>
+                <td>@rol.nombre</td>
+                <td>@rol.Estado</td>
+                <td>
+                    <a asp-action="Editar" asp-route-id="@rol.Id" class="btn btn-warning">Editar</a>
+                    <a asp-action="Eliminar" asp-route-id="@rol.Id" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

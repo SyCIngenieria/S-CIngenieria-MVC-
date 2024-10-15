@@ -71,8 +71,18 @@ namespace S_CIngenieria
 
             
             app.UseSession();
+            app.UseStatusCodePages(async context =>
+            {
+                if (context.HttpContext.Response.StatusCode == 404)
+                {
+                    
+                    context.HttpContext.Response.Redirect("/Home/AccesoDenegado");
+                }
+            });
 
-        
+            app.MapControllers();
+
+
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Login}/{action=IniciarSesion}/{id?}");

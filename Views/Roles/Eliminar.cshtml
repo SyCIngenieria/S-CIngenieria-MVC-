@@ -1,0 +1,21 @@
+﻿@model S_CIngenieria.Models.Seguridad.Roles
+
+@{
+    ViewData["Title"] = "Eliminar Rol";
+}
+
+<h2>Eliminar Rol</h2>
+
+<h3>¿Está seguro que desea eliminar este rol?</h3>
+<div>
+    <h4>@Model.nombre</h4>
+</div>
+
+<form asp-action="ConfirmarEliminar" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <input type="submit" value="Eliminar" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>

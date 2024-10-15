@@ -4,9 +4,9 @@ using S_CIngenieria.Models;
 using S_CIngenieria.Models.Seguridad;
 using System.Threading.Tasks;
 
-namespace S_CIngenieria.Controllers
+namespace S_CIngenieria.Controllers.SeguridadControllers
 {
-    [Authorize(Roles = "Administrador")]  // Protege todas las acciones del controlador
+    [Authorize(Roles = "Administrador")]  
     public class RolesController : Controller
     {
         private readonly SyCIngenieriaContext _context;
@@ -16,20 +16,19 @@ namespace S_CIngenieria.Controllers
             _context = context;
         }
 
-        // Acción para mostrar la lista de roles, accesible solo por administradores
         public async Task<IActionResult> Index()
         {
             var roles = _context.Roles.ToList();
             return View(roles);
         }
 
-        // Acción para mostrar la vista de crear rol
+     
         public IActionResult Crear()
         {
             return View();
         }
 
-        // Acción para crear un nuevo rol
+       
         [HttpPost]
         public async Task<IActionResult> Crear(Roles rol)
         {
@@ -45,7 +44,7 @@ namespace S_CIngenieria.Controllers
             return RedirectToAction("Index");
         }
 
-        // Acción para mostrar la vista de editar un rol
+  
         public async Task<IActionResult> Editar(int id)
         {
             var rol = await _context.Roles.FindAsync(id);
@@ -56,7 +55,7 @@ namespace S_CIngenieria.Controllers
             return View(rol);
         }
 
-        // Acción para actualizar un rol existente
+       
         [HttpPost]
         public async Task<IActionResult> Editar(int id, Roles rol)
         {
@@ -77,7 +76,7 @@ namespace S_CIngenieria.Controllers
             return RedirectToAction("Index");
         }
 
-        // Acción para eliminar un rol
+       
         public async Task<IActionResult> Eliminar(int id)
         {
             var rol = await _context.Roles.FindAsync(id);
@@ -89,7 +88,7 @@ namespace S_CIngenieria.Controllers
             return View(rol);
         }
 
-        // Acción para confirmar la eliminación de un rol
+    
         [HttpPost, ActionName("Eliminar")]
         public async Task<IActionResult> ConfirmarEliminar(int id)
         {

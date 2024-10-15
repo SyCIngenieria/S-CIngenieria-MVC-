@@ -1,0 +1,58 @@
+﻿@model S_CIngenieria.Models.Seguridad.Usuarios
+
+@{
+    ViewData["Title"] = "Crear Usuario";
+}
+
+<h1>Crear Usuario</h1>
+
+<form asp-action="Crear" enctype="multipart/form-data" method="post">
+
+    <div class="form-group">
+        <label asp-for="Nombres" class="control-label"></label>
+        <input asp-for="Nombres" class="form-control" />
+        <span asp-validation-for="Nombres" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Apellidos" class="control-label"></label>
+        <input asp-for="Apellidos" class="form-control" />
+        <span asp-validation-for="Apellidos" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Correo" class="control-label"></label>
+        <input asp-for="Correo" class="form-control" />
+        <span asp-validation-for="Correo" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Contraseña" class="control-label"></label>
+        <input asp-for="Contraseña" type="password" class="form-control" />
+        <span asp-validation-for="Contraseña" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="FkRol">Rol</label>
+        <select asp-for="FkRol" class="form-control" required>
+            <option value="">Seleccione un rol</option>
+            <option value="1">Administrador</option>
+            <option value="2">Cliente</option>
+            <option value="3">Empresa</option>
+        </select>
+        <span asp-validation-for="FkRol" class="text-danger"></span>
+    </div>
+    
+    <div class="form-group">
+        <label for="Imagen" class="control-label">Cargar Imagen</label>
+        <input type="file" name="Imagen" class="form-control" />
+        <span asp-validation-for="fotoPerfil" class="text-danger"></span>
+    </div>
+    <br /><br />
+    <div>
+        <input type="submit" value="Crear" class="btn btn-success" />
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>
+
+@if (ViewData["Mensaje"] != null)
+
+{
+    <div class="alert alert-warning">@ViewData["Mensaje"]</div>
+}

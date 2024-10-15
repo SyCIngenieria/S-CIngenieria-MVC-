@@ -1,0 +1,43 @@
+﻿@model IEnumerable<S_CIngenieria.Models.Seguridad.Usuarios>
+
+@{
+    ViewData["Title"] = "Usuarios";
+}
+
+<h1>Usuarios</h1>
+
+<a asp-action="Crear" class="btn btn-primary">Crear Nuevo Usuario</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var usuario in Model)
+
+        {
+            <tr>
+                <td>@usuario.Nombres @usuario.Apellidos</td>
+                <td>@usuario.Correo</td>
+                <td>@usuario.FkRol</td>
+                <td>
+                    <a asp-action="Editar" asp-route-id="@usuario.Id" class="btn btn-warning">Editar</a>
+                    <form asp-action="Eliminar" asp-route-id="@usuario.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (ViewData["Mensaje"] != null)
+
+{
+    <div class="alert alert-warning">@ViewData["Mensaje"]</div>
+}

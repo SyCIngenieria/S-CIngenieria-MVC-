@@ -9,5 +9,10 @@ namespace S_CIngenieria.Service
         Task<List<Permisos>> GetPermisosPorUsuario(int usuarioId);
         Task<string?> GetRolNombrePorUsuario(int usuarioId);
         Task<Usuarios> GetUsuarioPorNombre(string nombreUsuario);
+        Task<IEnumerable<Usuarios>> GetAllUsuarios(); 
+        Task<Usuarios> GetUsuarioById(int id);
+        Task<IEnumerable<Roles>> GetRoles(); 
+        Task UpdateUsuario(Usuarios usuario); 
+        Task<bool> DeleteUsuario(int id);
     }
 }

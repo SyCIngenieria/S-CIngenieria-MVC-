@@ -27,7 +27,7 @@ namespace S_CIngenieria.Service
         public async Task<Usuarios> GetUsuarioPorNombre(string nombreUsuario)
         {
             return await _context.Usuarios
-                .Include(u => u.Rol) 
+                .Include(u => u.Rol)
                 .FirstOrDefaultAsync(u => u.NombreUsuario == nombreUsuario);
         }
 
@@ -46,8 +46,6 @@ namespace S_CIngenieria.Service
                           where u.Id == usuarioId
                           select r.nombre).FirstOrDefaultAsync();
         }
-
-
         public async Task<List<Permisos>> GetPermisosPorUsuario(int usuarioId)
         {
 
@@ -64,5 +62,36 @@ namespace S_CIngenieria.Service
                     .Contains(p.FkRelacionalModulosRoles))
                 .ToListAsync();
         }
+        public async Task<IEnumerable<Usuarios>> GetAllUsuarios()
+        {
+            return await _context.Usuarios.ToListAsync();
+        }
+        public async Task<Usuarios> GetUsuarioById(int id)
+        {
+            return await _context.Usuarios.FindAsync(id);
+        }
+
+
+        public async Task<IEnumerable<Roles>> GetRoles()
+        {
+            return await _context.Roles.ToListAsync();
+        }
+        public async Task UpdateUsuario(Usuarios usuario)
+        {
+            _context.Usuarios.Update(usuario);
+            await _context.SaveChangesAsync();
+        }
+
+
+        public async Task<bool> DeleteUsuario(int id)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null) return false;
+
+            _context.Usuarios.Remove(usuario);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
     }
 }

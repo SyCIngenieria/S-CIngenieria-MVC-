@@ -1,0 +1,26 @@
+﻿@model S_CIngenieria.Models.Seguridad.Roles
+
+@{
+    ViewData["Title"] = "Editar Rol";
+}
+
+<h2>Editar Rol</h2>
+
+<form asp-action="Editar" method="post">
+    <div class="form-group">
+        <label asp-for="nombre" class="control-label"></label>
+        <input asp-for="nombre" class="form-control" />
+        <span asp-validation-for="nombre" class="text-danger"></span>
+    </div>
+
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <input type="submit" value="Guardar cambios" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
